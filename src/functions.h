@@ -2,19 +2,27 @@
 
 unsigned long lastBeepTime = 0;
 
-void beep(int pin, int frequency, int duration)
+void beep(int pin, int frequency, int duration, int beepDelay)
 {
     tone(pin, frequency, duration);
+    delay(beepDelay);
+
 }
 
-void beepFromDistance(int distance, int BUZZER_PIN, int duree)
+int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int lastTime)
 {
-    int currentTime = millis(); 
-    int endTime = currentTime + 2000;
+    int currentTime = lastTime;
 
-    for(int i =currentTime; i< endTime; i+duree){
-        beep(BUZZER_PIN, 8000, duree);
-    }
+    while(currentTime  <= lastTime + 500)
+    {
+        currentTime = millis();
+        Serial.println(currentTime);
+        beep(BUZZER_PIN, 659, 100, beepDelay);
+    } 
+    lastTime = currentTime;
+    Serial.println("lastTime: ");
+    Serial.println(lastTime);
+    return lastTime;
 }
 
 
