@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <functions.h>
+#include <notes.h>
 
 #define BUZZER_PIN 12
 #define SENSOR_TRIG 32
@@ -19,19 +20,19 @@ void loop()
   
   switch(distance){
     case 0 ... 10:
-      beepFromDistance(distance, BUZZER_PIN, 100);
+      beepFromDistance(distance, BUZZER_PIN, 1000);
       break;
     case 11 ... 20:
-      beepFromDistance(distance, BUZZER_PIN, 200);
+      beepFromDistance(distance, BUZZER_PIN, 2000);
       break;
     case 21 ... 30:
-      beepFromDistance(distance, BUZZER_PIN, 300);
+      beepFromDistance(distance, BUZZER_PIN, 3000);
       break;
     case 31 ... 40:
-      beepFromDistance(distance, BUZZER_PIN, 400);
+      beepFromDistance(distance, BUZZER_PIN, 4000);
       break;
     case 41 ... 50:
-      beepFromDistance(distance, BUZZER_PIN, 500);
+      beepFromDistance(distance, BUZZER_PIN, 5000);
       break;
   }
   delay(2000);

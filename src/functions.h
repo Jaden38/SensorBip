@@ -13,7 +13,7 @@ void beepFromDistance(int distance, int BUZZER_PIN, int duree)
     int endTime = currentTime + 2000;
 
     for(int i =currentTime; i< endTime; i+duree){
-        beep(BUZZER_PIN, 10000, duree);
+        beep(BUZZER_PIN, 8000, duree);
     }
 }
 
