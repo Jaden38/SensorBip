@@ -7,16 +7,32 @@
 
 void setup()
 {
+  Serial.begin(115200);
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(SENSOR_TRIG, OUTPUT);
   pinMode(SENSOR_ECHO, INPUT);
 }
 
-
-
 void loop()
 {
-  distance(SENSOR_TRIG,SENSOR_ECHO);
-  delay(1000)
-  // beepFromDistance(5, BUZZER_PIN);
+  int distance = getDistance(SENSOR_TRIG, SENSOR_ECHO);
+  
+  switch(distance){
+    case 0 ... 10:
+      beepFromDistance(distance, BUZZER_PIN, 100);
+      break;
+    case 11 ... 20:
+      beepFromDistance(distance, BUZZER_PIN, 200);
+      break;
+    case 21 ... 30:
+      beepFromDistance(distance, BUZZER_PIN, 300);
+      break;
+    case 31 ... 40:
+      beepFromDistance(distance, BUZZER_PIN, 400);
+      break;
+    case 41 ... 50:
+      beepFromDistance(distance, BUZZER_PIN, 500);
+      break;
+  }
+  delay(2000);
 }
