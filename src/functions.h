@@ -2,14 +2,18 @@
 
 unsigned long lastBeepTime = 0;
 
-void beep(int pin, int frequency, int duration, int beepDelay)
-{
+void beep(int pin, int frequency, int duration, int beepDelay, boolean light, int LedPin)
+{   
+    
     tone(pin, frequency, duration);
+    if (light){
+        turnLedOn(LedPin, duration);
+    }
     delay(beepDelay);
+    
+} 
 
-}
-
-int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int lastTime, int LoopDelay, int freq)
+int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int lastTime, int LoopDelay, int freq, boolean light, int LedPin)
 {
     int currentTime = lastTime;
 
@@ -17,7 +21,7 @@ int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int
     {
         currentTime = millis();
         Serial.println(currentTime);
-        beep(BUZZER_PIN, freq, 100, beepDelay);
+        beep(BUZZER_PIN, freq, 100, beepDelay, light, LedPin);
     } 
     lastTime = currentTime;
     //Serial.println("lastTime: ");
@@ -25,7 +29,11 @@ int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int
     return lastTime;
 }
 
-
+void turnLedOn(int pin, int duration) {
+    DigitalWrite(pin, HIGH)
+    delay(duration)
+    DigitalWrite(pin, LOW)
+}
 
 
 int getDistance(int trig, int echo){

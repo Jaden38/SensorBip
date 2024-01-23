@@ -6,7 +6,7 @@
 #define buzzerPin 12
 #define sensorTrig 32
 #define sensorEcho 33
-#define pinLedWifi 2
+#define LedPin 34
 
 #define SSID "iPhone de Adrien"
 #define PWD "Pi!Pi!Corn123"
@@ -54,13 +54,14 @@ void setup()
   pinMode(buzzerPin, OUTPUT);
   pinMode(sensorTrig, OUTPUT);
   pinMode(sensorEcho, INPUT);
-  pinMode(pinLedWifi, OUTPUT);
+  pinMode(LedPin, OUTPUT);
 
   initWiFi();
   Serial.print("RSSI : ");
   Serial.println(WiFi.RSSI());
   server.begin();
 
+  pinMode(14,LOW);
 }
 
 
@@ -90,23 +91,19 @@ void loop()
             client.println("Connection: close");
             client.println();
             
-            // turns the GPIOs on and off
+            // turns the GPIOs conditions on and off
             if (header.indexOf("GET /BipSensor/on") >= 0) {
               Serial.println("GPIO BipSensor on");
               BipSensor = true;
-              //digitalWrite(output26, HIGH);
             } else if (header.indexOf("GET /BipSensor/off") >= 0) {
               Serial.println("GPIO BipSensor off");
               BipSensor = false;
-              //digitalWrite(output26, LOW);
             } else if (header.indexOf("GET /light/on") >= 0) {
               Serial.println("GPIO light on");
               light = true;
-              //digitalWrite(output27, HIGH);
             } else if (header.indexOf("GET /light/off") >= 0) {
               Serial.println("GPIO light off");
               light = false;
-              //digitalWrite(output27, LOW);
             }
             
             // Display the HTML web page
@@ -196,7 +193,7 @@ void loop()
   // Serial.println("beepDelay: ");
   // Serial.println(beepDelay);
 
-    beepFromDistance(distance, buzzerPin, 100, beepDelay, lastTime, LoopDelay, freq);
+    beepFromDistance(distance, buzzerPin, 100, beepDelay, lastTime, LoopDelay, freq, light, LedPin);
 
     //Faire en sorte que la loop inclus la led seulement le light = On
     if (light){
@@ -209,20 +206,4 @@ void loop()
   //Envoyé uen notif qui fait revenir à la page initial ?
 
 }
-
-
-
-
-  // int distance = getDistance(sensorTrig, sensorEcho);
-  // int lastTime = 0;
-
-  // int beepDelay = map(distance,0, 60, 10,LoopDelay);
-  // int freq = map(distance, 60, 0, 500,700);
-
-  
-  // Serial.println("beepDelay: ");
-  // Serial.println(beepDelay);
-  // beepFromDistance(distance, BUZZER_PIN, 100, beepDelay, lastTime, LoopDelay, freq);
-
-//}
 
