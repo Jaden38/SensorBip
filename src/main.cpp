@@ -113,11 +113,20 @@ void loop()
             client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
             client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
             client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-            client.println(".button2 {background-color: #555555;}</style></head>");
+            client.println(".button2 {background-color: #555555;}");
+            client.println(".home-button { position: absolute; top: 10px; left: 10px; }"); // Position the SVG at the top-left corner
+            client.println("</style></head>");
             
             // Web Page Heading
-            client.println("<body><h1>BipSensor Web Server</h1>");
 
+
+            client.println("<a class=\"home-button\" href=\"/\">");
+            client.println("  <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 576 512\" width=\"50\" height=\"50\">");
+            client.println("    <!-- Your SVG path here -->");
+            client.println("    <path fill=\"#63E6BE\" d=\"M280.4 148.3L96 300.1V464a16 16 0 0 0 16 16l112.1-.3a16 16 0 0 0 15.9-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.6a16 16 0 0 0 16 16.1L464 480a16 16 0 0 0 16-16V300L295.7 148.3a12.2 12.2 0 0 0 -15.3 0zM571.6 251.5L488 182.6V44.1a12 12 0 0 0 -12-12h-56a12 12 0 0 0 -12 12v72.6L318.5 43a48 48 0 0 0 -61 0L4.3 251.5a12 12 0 0 0 -1.6 16.9l25.5 31A12 12 0 0 0 45.2 301l235.2-193.7a12.2 12.2 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0 -1.7-16.9z\"/>");
+            client.println("  </svg>");
+            client.println("</a>"); 
+            client.println("<body><h1>BipSensor Web Server</h1>");
 
 //Fonction pour mettre un timer sur la page => Beaucoup trop lourd en terme d'HTTP et donc sans interet.
 
@@ -139,23 +148,24 @@ void loop()
                 
             // client.println("</script>");
       
-            // Display current state, and ON/OFF buttons for GPIO bipsensor  
+            // Display current state, and ON/OFF buttons for GPIO bipsensor 
+             
             client.println("<p>GPIO XX - BipSensor </p>");
             // If the BipSensor is off, it displays the ON button       
             if (BipSensor== false) {
               client.println("<p><a href=\"/BipSensor/on\"><button class=\"button\">Turn ON</button></a></p>");
             } else {
               client.println("<p><a href=\"/BipSensor/off\"><button class=\"button button2\">Turn OFF</button></a></p>");
-            } 
-               
-            // Display current state, and ON/OFF buttons for GPIO light  
-            client.println("<p>GPIO XX - Light </p>");
-            // If the light is off, it displays the ON button       
-            if (light==false) {
-              client.println("<p><a href=\"/light/on\"><button class=\"button\">Turn ON</button></a></p>");
-            } else {
-              client.println("<p><a href=\"/light/off\"><button class=\"button button2\">Turn OFF</button></a></p>");
-            }
+              // Display current state, and ON/OFF buttons for GPIO light  
+              client.println("<p>GPIO XX - Light </p>");
+              // If the light is off, it displays the ON button       
+              if (light==false) {
+                client.println("<p><a href=\"/light/on\"><button class=\"button\">Turn ON</button></a></p>");
+              } else {
+                client.println("<p><a href=\"/light/off\"><button class=\"button button2\">Turn OFF</button></a></p>");
+              }
+            }               
+            
             client.println("</body></html>");
             
             // The HTTP response ends with another blank line
