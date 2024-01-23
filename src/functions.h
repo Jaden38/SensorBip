@@ -9,19 +9,19 @@ void beep(int pin, int frequency, int duration, int beepDelay)
 
 }
 
-int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int lastTime)
+int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int lastTime, int LoopDelay, int freq)
 {
     int currentTime = lastTime;
 
-    while(currentTime  <= lastTime + 500)
+    while(currentTime  <= lastTime + LoopDelay)
     {
         currentTime = millis();
         Serial.println(currentTime);
-        beep(BUZZER_PIN, 659, 100, beepDelay);
+        beep(BUZZER_PIN, freq, 100, beepDelay);
     } 
     lastTime = currentTime;
-    Serial.println("lastTime: ");
-    Serial.println(lastTime);
+    //Serial.println("lastTime: ");
+    //Serial.println(lastTime);
     return lastTime;
 }
 
@@ -38,9 +38,9 @@ int getDistance(int trig, int echo){
   long duration = pulseIn(echo, HIGH);
 
   int distance = (duration / 2) / 29.1;
-  Serial.println("Distance: ");
-  Serial.print(distance);
-  Serial.println(" cm");
+  //Serial.println("Distance: ");
+  //Serial.print(distance);
+  //Serial.println(" cm");
 
   return distance;
 }

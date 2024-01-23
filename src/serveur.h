@@ -1,72 +1,25 @@
 #include <Arduino.h>
-#include <functions.h>
 #include <WiFi.h>
 
-//Setup des pins GPIO
-#define buzzerPin 12
-#define sensorTrig 32
-#define sensorEcho 33
-#define pinLedWifi 2
 
-#define SSID "iPhone de Adrien"
-#define PWD "Pi!Pi!Corn123"
-
-WiFiServer server(80);
-
-const char* ssid = SSID;
-const char* password = PWD;
+String BipSensor = "off";
+String light = "off";
 
 String header;
 
-boolean BipSensor = false;
-boolean light = false;
-
-//Current time
+// Current time
 unsigned long currentTime = millis();
 // Previous time
 unsigned long previousTime = 0; 
 // Define timeout time in milliseconds
-const long timeoutTime = 2000;
+const long timeoutTime = 10000;
 
-//String hostname = "Wemos mini D1 TEST";
-
-
-unsigned int LoopDelay = 400;
-
-void initWiFi(){
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-  Serial.print("Connecting to WiFi ..");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(500); 
-    }
-    Serial.println(WiFi.localIP());
-}
-
-void setup()
-{
-  Serial.begin(115200);
-
-  // Setup des Pins 
-  pinMode(buzzerPin, OUTPUT);
-  pinMode(sensorTrig, OUTPUT);
-  pinMode(sensorEcho, INPUT);
-  pinMode(pinLedWifi, OUTPUT);
-
-  initWiFi();
-  Serial.print("RSSI : ");
-  Serial.println(WiFi.RSSI());
-  server.begin();
-
-}
-
-
-void loop()
-{
+void checkserver(){   
+  
   WiFiClient client = server.available();
+
+  //delay(10000);
+  //Serial.println(client);
 
   if (client){
     currentTime = millis();
@@ -93,19 +46,19 @@ void loop()
             // turns the GPIOs on and off
             if (header.indexOf("GET /BipSensor/on") >= 0) {
               Serial.println("GPIO BipSensor on");
-              BipSensor = true;
+              BipSensor = "on";
               //digitalWrite(output26, HIGH);
             } else if (header.indexOf("GET /BipSensor/off") >= 0) {
               Serial.println("GPIO BipSensor off");
-              BipSensor = false;
+              BipSensor = "off";
               //digitalWrite(output26, LOW);
             } else if (header.indexOf("GET /light/on") >= 0) {
               Serial.println("GPIO light on");
-              light = true;
+              light = "on";
               //digitalWrite(output27, HIGH);
             } else if (header.indexOf("GET /light/off") >= 0) {
               Serial.println("GPIO light off");
-              light = false;
+              light = "off";
               //digitalWrite(output27, LOW);
             }
             
@@ -122,41 +75,20 @@ void loop()
             
             // Web Page Heading
             client.println("<body><h1>BipSensor Web Server</h1>");
-
-
-//Fonction pour mettre un timer sur la page => Beaucoup trop lourd en terme d'HTTP et donc sans interet.
-
-            // client.println("<div id=\"timer\">5</div>");
-
-            // client.println("<script type=\"text/javascript\">");
-            // client.println("let temps = 5;");
-            // client.println("const timerElement = document.getElementById(\"timer\")");
             
-            // client.println("function timerCount(){");
-            // client.println("var interval = setInterval(function(){");
-            // client.println("document.getElementById(\"timer\").innerHTML = temps");
-            // client.println("temps--");
-            // client.println("if(temps < 0){");
-            // client.println("clearInterval(interval);");
-            // client.println("document.getElementById(\"timer\").innerHTML = \"please reconnect\"}");                    
-            // client.println("}, 1000);}");
-            // client.println("timerCount();");
-                
-            // client.println("</script>");
-      
-            // Display current state, and ON/OFF buttons for GPIO bipsensor  
+            // Display current state, and ON/OFF buttons for GPIO 26  
             client.println("<p>GPIO XX - BipSensor </p>");
             // If the BipSensor is off, it displays the ON button       
-            if (BipSensor== false) {
+            if (BipSensor=="off") {
               client.println("<p><a href=\"/BipSensor/on\"><button class=\"button\">ON</button></a></p>");
             } else {
               client.println("<p><a href=\"/BipSensor/off\"><button class=\"button button2\">OFF</button></a></p>");
             } 
                
-            // Display current state, and ON/OFF buttons for GPIO light  
+            // Display current state, and ON/OFF buttons for GPIO 27  
             client.println("<p>GPIO XX - Light </p>");
             // If the light is off, it displays the ON button       
-            if (light==false) {
+            if (light=="off") {
               client.println("<p><a href=\"/light/on\"><button class=\"button\">ON</button></a></p>");
             } else {
               client.println("<p><a href=\"/light/off\"><button class=\"button button2\">OFF</button></a></p>");
@@ -182,47 +114,4 @@ void loop()
     Serial.println("Client disconnected.");
     Serial.println("");
   }
-
-    //Faire en sorte que la loop continu tant que BipSensor = On
-  if (BipSensor){
-    
-    int distance = getDistance(sensorTrig, sensorEcho);
-    int lastTime = 0;
-
-    int beepDelay = map(distance,0, 60, 10,LoopDelay);
-    int freq = map(distance, 60, 0, 500,700);
-
-  
-  // Serial.println("beepDelay: ");
-  // Serial.println(beepDelay);
-
-    beepFromDistance(distance, buzzerPin, 100, beepDelay, lastTime, LoopDelay, freq);
-
-    //Faire en sorte que la loop inclus la led seulement le light = On
-    if (light){
-
-    }
-
-  }
-
-  //Voir pour que si condition d'arret => Page html à mettre au propre ? Donc si BipSensorloop =! de bipSensor, renvoyé l'utilisateur sur une page propre ? 
-  //Envoyé uen notif qui fait revenir à la page initial ?
-
 }
-
-
-
-
-  // int distance = getDistance(sensorTrig, sensorEcho);
-  // int lastTime = 0;
-
-  // int beepDelay = map(distance,0, 60, 10,LoopDelay);
-  // int freq = map(distance, 60, 0, 500,700);
-
-  
-  // Serial.println("beepDelay: ");
-  // Serial.println(beepDelay);
-  // beepFromDistance(distance, BUZZER_PIN, 100, beepDelay, lastTime, LoopDelay, freq);
-
-//}
-
