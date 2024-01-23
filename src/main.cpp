@@ -6,7 +6,7 @@
 #define buzzerPin 12
 #define sensorTrig 32
 #define sensorEcho 33
-#define LedPin 34
+#define LedPin 26
 
 #define SSID "iPhone de Adrien"
 #define PWD "Pi!Pi!Corn123"
@@ -60,8 +60,6 @@ void setup()
   Serial.print("RSSI : ");
   Serial.println(WiFi.RSSI());
   server.begin();
-
-  pinMode(14,LOW);
 }
 
 
@@ -145,18 +143,18 @@ void loop()
             client.println("<p>GPIO XX - BipSensor </p>");
             // If the BipSensor is off, it displays the ON button       
             if (BipSensor== false) {
-              client.println("<p><a href=\"/BipSensor/on\"><button class=\"button\">ON</button></a></p>");
+              client.println("<p><a href=\"/BipSensor/on\"><button class=\"button\">Turn ON</button></a></p>");
             } else {
-              client.println("<p><a href=\"/BipSensor/off\"><button class=\"button button2\">OFF</button></a></p>");
+              client.println("<p><a href=\"/BipSensor/off\"><button class=\"button button2\">Turn OFF</button></a></p>");
             } 
                
             // Display current state, and ON/OFF buttons for GPIO light  
             client.println("<p>GPIO XX - Light </p>");
             // If the light is off, it displays the ON button       
             if (light==false) {
-              client.println("<p><a href=\"/light/on\"><button class=\"button\">ON</button></a></p>");
+              client.println("<p><a href=\"/light/on\"><button class=\"button\">Turn ON</button></a></p>");
             } else {
-              client.println("<p><a href=\"/light/off\"><button class=\"button button2\">OFF</button></a></p>");
+              client.println("<p><a href=\"/light/off\"><button class=\"button button2\">Turn OFF</button></a></p>");
             }
             client.println("</body></html>");
             

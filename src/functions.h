@@ -2,10 +2,16 @@
 
 unsigned long lastBeepTime = 0;
 
+void turnLedOn(int pin, int duration) {
+    digitalWrite(pin, HIGH);
+    delay(duration);
+    digitalWrite(pin, LOW);
+}
+
 void beep(int pin, int frequency, int duration, int beepDelay, boolean light, int LedPin)
 {   
     
-    tone(pin, frequency, duration);
+    //tone(pin, frequency, duration);
     if (light){
         turnLedOn(LedPin, duration);
     }
@@ -29,11 +35,7 @@ int beepFromDistance(int distance, int BUZZER_PIN, int duree, int beepDelay, int
     return lastTime;
 }
 
-void turnLedOn(int pin, int duration) {
-    DigitalWrite(pin, HIGH)
-    delay(duration)
-    DigitalWrite(pin, LOW)
-}
+
 
 
 int getDistance(int trig, int echo){
