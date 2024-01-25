@@ -33,6 +33,8 @@ const long timeoutTime = 2000;
 
 unsigned int LoopDelay = 400;
 
+int count = 0;
+
 void initWiFi(){
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -192,6 +194,25 @@ void loop()
   if (BipSensor){
     
     int distance = getDistance(sensorTrig, sensorEcho);
+
+    //Interruption naturel du processus avec BipSensor à false si pas de detection d'objet au dela de 50cm.
+    if (distance > 50){
+      count += 1;
+      
+    }
+    else {
+      count = 0;
+    }
+    if (count == 40) {
+      BipSensor = false;
+      count = 0;
+    }
+    Serial.println("distance is :");
+    Serial.println(distance);
+    Serial.println("count is :");
+    Serial.println(count);
+
+
     int lastTime = 0;
 
     int beepDelay = map(distance,0, 60, 10,LoopDelay);
